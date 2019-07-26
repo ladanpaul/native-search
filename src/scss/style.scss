@@ -1,0 +1,117 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: lightgrey;
+}
+
+.wrapper {
+  width: 320px;
+  background: #fff;
+}
+
+.header {
+  .search {
+    padding: 16px;
+    border-bottom: 1px solid #E0E0E0;
+    
+    &__reset {
+      display: block;
+      margin-left: auto;
+      border: none;
+      outline: none;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    &__input {
+      width: 100%;
+      height: 36px;
+      margin-top: 16px;
+      padding: 0 16px 0 42px;
+      line-height: 20px;
+      letter-spacing: 0.01em;
+      border-radius: 10px;
+      outline: none;
+      border: none;
+      background: rgba(142, 142, 147, 0.12);
+
+      &::placeholder {
+        font-weight: 500;
+        color: #828282;
+      }
+    }
+  }
+  
+  .filter {
+    padding: 16px;
+    border-bottom: 1px solid #E0E0E0;
+  }
+}
+
+.user-card {
+  display: flex;
+  padding: 40px 15px;
+
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+
+  .user {
+    margin-left: 15px;
+
+    &__title {
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    &__status {
+      display: inline-block;
+      margin-top: 8px;
+      font-size: 12px;
+      color: #27AE60;
+    }
+
+    &__rate {
+      margin-top: 8px;
+    }
+
+    .rate {
+      &__count, .comments {
+        font-size: 12px;
+        line-height: 18px;
+        color: #828282;
+      }
+    }
+
+    &__position {
+      margin-top: 8px;
+      @extend .rate__count;
+    }
+
+    &__cost {
+      margin-top: 8px;
+    }
+
+    .cost {
+      &__currency {
+        font-size: 18px;
+        line-height: 21px;
+      }
+
+      &__time {
+        margin-left: 6px;
+        @extend .rate__count;
+      }
+    }
+
+    &__buttons {
+      margin-top: 20px;
+    }
+  }
+}
