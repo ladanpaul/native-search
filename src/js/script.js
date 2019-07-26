@@ -19,7 +19,8 @@ let users = null
 // },
 
 const createUser = (userData) => {
-  const userCard = document.createElement('section')
+  const cardWrapper = document.createElement('section')
+  const userCard = document.createElement('div')
   const avatar = document.createElement('img')
   const user = document.createElement('div')
   const userTitle = document.createElement('h3')
@@ -32,7 +33,15 @@ const createUser = (userData) => {
   const userCost = document.createElement('div')
   const costCurrency = document.createElement('span')
   const costTime = document.createElement('span')
+  const userButtons = document.createElement('div')
+  const phoneBtn = document.createElement('button')
+  const videoBtn = document.createElement('button')
+  const emailBtn = document.createElement('button')
+  const phoneBtnImg = document.createElement('img')
+  const videoBtnImg = document.createElement('img')
+  const emailBtnImg = document.createElement('img')
 
+  cardWrapper.className = 'card-wrapper'
   userCard.className = 'user-card'
   avatar.className = 'avatar'
   user.className = 'user'
@@ -49,27 +58,44 @@ const createUser = (userData) => {
 
   avatar.setAttribute('src', userData.avatar)
   star.setAttribute('src', '../img/Star.svg')
+  phoneBtnImg.setAttribute('src', '../img/Star.svg')
+  videoBtnImg.setAttribute('src', '../img/Star.svg')
+  emailBtnImg.setAttribute('src', '../img/Star.svg')
 
   userCard.appendChild(avatar)
+  userCard.appendChild(user)
   userCard.appendChild(user)
 
   userTitle.innerText = `${userData.first_name} ${userData.last_name}`
   userStatus.innerText = userData.status ? 'В сети' : 'Не в сети'
   rateCount.innerText = `(${userData.rate})`
   userPosition.innerText = userData.speciality ? userData.speciality.join(', ') : ''
+  comments.innerText = userData.comments
+  costCurrency.innerText = '250 грн'
+  costTime.innerText = '(10 минут)'
 
   for (let i = 0; i < userData.rate; i++) {
     userRate.appendChild(star.cloneNode())
   }
 
+  phoneBtn.appendChild(phoneBtnImg)
+  videoBtn.appendChild(videoBtnImg)
+  emailBtn.appendChild(emailBtnImg)
+  userCost.appendChild(costCurrency)
+  userCost.appendChild(costTime)
   userRate.appendChild(rateCount)
+  userRate.appendChild(comments)
+  userButtons.appendChild(phoneBtn)
+  userButtons.appendChild(videoBtn)
+  userButtons.appendChild(emailBtn)
   user.appendChild(userTitle)
   user.appendChild(userStatus)
   user.appendChild(userRate)
   user.appendChild(userPosition)
+  user.appendChild(userCost)
 
-  wrapper.appendChild(userCard)
-  console.log('avatar -> ', userCard)
+  cardWrapper.appendChild(userCard)
+  wrapper.appendChild(cardWrapper)
 }
 
 const appendUsers = (data) => {

@@ -11,6 +11,7 @@ body {
 .wrapper {
   width: 320px;
   background: #fff;
+  margin: auto;
 }
 
 .header {
@@ -52,9 +53,14 @@ body {
   }
 }
 
+.card-wrapper {
+  padding: 0 15px;
+}
+
 .user-card {
   display: flex;
-  padding: 40px 15px;
+  border-bottom: 1px solid #E0E0E0;
+  padding: 15px 0 20px 0;
 
   .avatar {
     width: 40px;
@@ -86,6 +92,10 @@ body {
         font-size: 12px;
         line-height: 18px;
         color: #828282;
+      }
+
+      .comments {
+        margin-left: 6px;
       }
     }
 
