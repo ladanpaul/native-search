@@ -1,3 +1,16 @@
+@font-face {
+  font-family: RobotoLt;
+  font-weight: 500;
+  src: url('../fonts/roboto/Roboto-Medium.woff2') format('woff2'),
+      url('../fonts//roboto/Roboto-Medium.woff') format('woff');
+  font-style: normal;
+}
+
+@function rem($px) {
+  $rems: $px / 16;
+  @return #{$rems}rem;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -9,9 +22,9 @@ body {
 }
 
 .wrapper {
+  margin: auto;
   width: 320px;
   background: #fff;
-  margin: auto;
 }
 
 .header {
@@ -22,6 +35,10 @@ body {
     &__reset {
       display: block;
       margin-left: auto;
+      font-family: RobotoLt;
+      font-size: rem(12);
+      line-height: 18px;
+      letter-spacing: .02em;
       border: none;
       outline: none;
       background: transparent;
@@ -29,20 +46,34 @@ body {
     }
 
     &__input {
-      width: 100%;
-      height: 36px;
-      margin-top: 16px;
       padding: 0 16px 0 42px;
+      height: 36px;
+      width: 100%;
       line-height: 20px;
-      letter-spacing: 0.01em;
-      border-radius: 10px;
+      font-family: RobotoLt;
+      letter-spacing: .01em;
+      background: rgba(142, 142, 147, 0.12);
       outline: none;
       border: none;
-      background: rgba(142, 142, 147, 0.12);
-
+      border-radius: 10px;
+      
       &::placeholder {
+        font-size: rem(16);
         font-weight: 500;
         color: #828282;
+      }
+    }
+    
+    .input-wrapper {
+      position: relative;
+      margin-top: 16px;
+
+      &:after {
+        content: url('../img/search.svg');
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-45%);
       }
     }
   }
@@ -50,6 +81,14 @@ body {
   .filter {
     padding: 16px;
     border-bottom: 1px solid #E0E0E0;
+    font-family: RobotoLt;
+
+    .filter-wrapper__title {
+      font-size: rem(16);
+      font-weight: 500;
+      line-height: 21px;
+      letter-spacing: .02em;
+    }
   }
 }
 
@@ -70,31 +109,39 @@ body {
 
   .user {
     margin-left: 15px;
-
+    font-family: RobotoLt;
+    
     &__title {
+      font-size: rem(14);
       font-weight: 500;
-      font-size: 14px;
+      line-height: 21px;
     }
 
     &__status {
       display: inline-block;
       margin-top: 8px;
-      font-size: 12px;
+      font-size: rem(12);
+      line-height: 18px;
       color: #27AE60;
     }
 
     &__rate {
       margin-top: 8px;
+      font-size: rem(12);
+      line-height: 18px;
     }
 
     .rate {
       &__count, .comments {
-        font-size: 12px;
+        margin-left: 4px;
+        font-size: rem(12);
+        font-family: RobotoLt;
         line-height: 18px;
         color: #828282;
       }
 
       .comments {
+        font-family: RobotoLt;
         margin-left: 6px;
       }
     }
@@ -110,7 +157,7 @@ body {
 
     .cost {
       &__currency {
-        font-size: 18px;
+        font-size: rem(18);
         line-height: 21px;
       }
 
@@ -121,7 +168,31 @@ body {
     }
 
     &__buttons {
+      display: flex;
       margin-top: 20px;
     }
   }
+}
+
+.circle-btn {
+  margin-left: 16px;
+  background: transparent;
+  border: none;
+  outline: none;
+  height: auto;
+  width: auto;
+  opacity: .8;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &:first-child {
+    margin-left: 0;
+  }
+}
+
+.hide {
+  display: none;
 }

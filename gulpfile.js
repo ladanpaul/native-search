@@ -20,6 +20,7 @@ const paths = {
     js: 'src/js/**/*.js',
     img: 'src/img/**/*.*',
     css: 'src/scss/**/*.scss',
+    fonts: 'src/fonts/**/*.*'
   },
   dist: {
     data: 'dist/data',
@@ -27,6 +28,7 @@ const paths = {
     js: 'dist/js',
     img: 'dist/img',
     css: 'dist/css',
+    fonts: 'dist/fonts'
   }
 }
 
@@ -57,6 +59,12 @@ gulp.task('bundleImg', () => {
     .pipe(browserSync.stream())
 });
 
+gulp.task('bundleFonts', () => {
+  return gulp.src(paths.src.fonts)
+    .pipe(gulp.dest(paths.dist.fonts))
+    .pipe(browserSync.stream())
+});
+
 gulp.task('bundleData', () => {
   return gulp.src(paths.src.data)
     .pipe(gulp.dest(paths.dist.data))
@@ -74,6 +82,7 @@ gulp.task('watch', () => {
   gulp.watch(paths.src.css, gulp.series('bundleCss'))
   gulp.watch(paths.src.js, gulp.series('bundleJs'))
   gulp.watch(paths.src.img, gulp.series('bundleImg'))
+  gulp.watch(paths.src.fonts, gulp.series('bundleFonts'));
 })
 
-gulp.task('default', gulp.parallel(['bundleData', 'bundleHtml', 'bundleCss', 'bundleJs', 'bundleImg', 'browser-sync', 'watch']))
+gulp.task('default', gulp.parallel(['bundleData', 'bundleHtml', 'bundleCss', 'bundleFonts', 'bundleJs', 'bundleImg', 'browser-sync', 'watch']))

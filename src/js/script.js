@@ -1,137 +1,162 @@
-const wrapper = document.querySelector('.wrapper')
 const search = document.querySelector('.search__input')
-// const items = document.querySelectorAll('.users li')
 let users = null
 
-// {
-//   "id": "02a521fd-f67c-432d-9d75-ad481a691bef",
-//   "first_name": "Bates",
-//   "last_name": "Marquez ",
-//   "status": true,
-//   "comments": 3,
-//   "rate": 5,
-//   "avatar": "http://placehold.it/32x32",
-//   "speciality": [
-//     "Хирург",
-//     "Гастроэнтеролог",
-//     "Терапевт"
-//   ]
-// },
-
-const createUser = (userData) => {
-  const cardWrapper = document.createElement('section')
-  const userCard = document.createElement('div')
-  const avatar = document.createElement('img')
-  const user = document.createElement('div')
-  const userTitle = document.createElement('h3')
-  const userStatus = document.createElement('span')
-  const userRate = document.createElement('div')
-  const star = document.createElement('img')
-  const rateCount = document.createElement('span')
-  const comments = document.createElement('span')
-  const userPosition = document.createElement('div')
-  const userCost = document.createElement('div')
-  const costCurrency = document.createElement('span')
-  const costTime = document.createElement('span')
-  const userButtons = document.createElement('div')
-  const phoneBtn = document.createElement('button')
-  const videoBtn = document.createElement('button')
-  const emailBtn = document.createElement('button')
-  const phoneBtnImg = document.createElement('img')
-  const videoBtnImg = document.createElement('img')
-  const emailBtnImg = document.createElement('img')
-
-  cardWrapper.className = 'card-wrapper'
-  userCard.className = 'user-card'
-  avatar.className = 'avatar'
-  user.className = 'user'
-  userTitle.className = 'user__title'
-  userStatus.className = 'user__status'
-  userRate.className = 'user__rate rate'
-  star.className = 'rate__star'
-  rateCount.className = 'rate__count'
-  comments.className = 'comments'
-  userPosition.className = 'user__position'
-  userCost.className = 'user__cost cost'
-  costCurrency.className = 'cost__currency'
-  costTime.className = 'cost__time'
-
-  avatar.setAttribute('src', userData.avatar)
-  star.setAttribute('src', '../img/Star.svg')
-  phoneBtnImg.setAttribute('src', '../img/Star.svg')
-  videoBtnImg.setAttribute('src', '../img/Star.svg')
-  emailBtnImg.setAttribute('src', '../img/Star.svg')
-
-  userCard.appendChild(avatar)
-  userCard.appendChild(user)
-  userCard.appendChild(user)
-
-  userTitle.innerText = `${userData.first_name} ${userData.last_name}`
-  userStatus.innerText = userData.status ? 'В сети' : 'Не в сети'
-  rateCount.innerText = `(${userData.rate})`
-  userPosition.innerText = userData.speciality ? userData.speciality.join(', ') : ''
-  comments.innerText = userData.comments
-  costCurrency.innerText = '250 грн'
-  costTime.innerText = '(10 минут)'
-
-  for (let i = 0; i < userData.rate; i++) {
-    userRate.appendChild(star.cloneNode())
-  }
-
-  phoneBtn.appendChild(phoneBtnImg)
-  videoBtn.appendChild(videoBtnImg)
-  emailBtn.appendChild(emailBtnImg)
-  userCost.appendChild(costCurrency)
-  userCost.appendChild(costTime)
-  userRate.appendChild(rateCount)
-  userRate.appendChild(comments)
-  userButtons.appendChild(phoneBtn)
-  userButtons.appendChild(videoBtn)
-  userButtons.appendChild(emailBtn)
-  user.appendChild(userTitle)
-  user.appendChild(userStatus)
-  user.appendChild(userRate)
-  user.appendChild(userPosition)
-  user.appendChild(userCost)
-
-  cardWrapper.appendChild(userCard)
-  wrapper.appendChild(cardWrapper)
+const addToPage = (node, parent) => {
+  document.querySelectorAll(parent).forEach((el) => {
+    el.appendChild(node)
+  })
 }
 
-const appendUsers = (data) => {
+const createNewElement = (el, parent) => {
+  const node = document.createElement(el.node)
+
+  if (el.text) {
+    node.innerText = el.text
+  }
+
+  if (el.attr) {
+    Object.keys(el.attr).forEach((key) => {
+      node.setAttribute(key, el.attr[key])
+    });
+  }
+
+  if (parent) {
+    addToPage(node, parent)
+  }
+}
+
+const createUserCard = (user) => {
+  createNewElement({ node: 'div', attr: { class: 'card-wrapper' } }, '.wrapper')
+
+  createNewElement({ node: 'div', attr: { class: 'user-card' } }, '.card-wrapper')
+
+  createNewElement({
+    node: 'img',
+    attr: { class: 'avatar', src: user.avatar, alt: 'doctor' }
+  }, '.user-card')
+
+  createNewElement({ node: 'div', attr: { class: 'user' } }, '.user-card')
+
+  createNewElement({
+    node: 'h3',
+    text: `${user.first_name} ${user.last_name}`,
+    attr: { class: 'user__title' }
+  }, '.user')
+
+  createNewElement({
+    node: 'span',
+    text: user.status ? 'В сети' : 'Не в сети',
+    attr: { class: 'user__status' }
+  }, '.user')
+
+  createNewElement({ node: 'div', attr: { class: 'user__rate rate' } }, '.user')
+
+  for (let i = 0; i < user.rate; i++) {
+    createNewElement({
+      node: 'img',
+      attr: { class: 'rate__star', src: '../img/Star.svg', alt: 'star' }
+    }, '.rate')
+  }
+
+  createNewElement({
+    node: 'span',
+    text: `(${user.rate})`,
+    attr: { class: 'rate__count' }
+  }, '.rate')
+
+  createNewElement({
+    node: 'span',
+    text: `Отзыввы ${user.comments}`,
+    attr: { class: 'comments' }
+  }, '.rate')
+
+  createNewElement({
+    node: 'div',
+    text: user.speciality ? user.speciality.join(', ') : '',
+    attr: { class: 'user__position' }
+  }, '.user')
+
+  createNewElement({ node: 'div', attr: { class: 'user__cost cost' } }, '.user')
+
+  createNewElement({
+    node: 'span',
+    text: '250 грн',
+    attr: { class: 'cost__currency' }
+  }, '.cost')
+
+  createNewElement({
+    node: 'span',
+    text: '(10 минут)',
+    attr: { class: 'cost__time' }
+  }, '.cost')
+
+  createNewElement({ node: 'div', attr: { class: 'user__buttons' } }, '.user')
+
+  createNewElement({ node: 'button', attr: { class: 'circle-btn phone' } }, '.user__buttons')
+
+  createNewElement({
+    node: 'img',
+    attr: { src: '../img/phone.svg', alt: 'phone' }
+  }, '.phone')
+
+  createNewElement({ node: 'button', attr: { class: 'circle-btn video' } }, '.user__buttons')
+
+  createNewElement({
+    node: 'img',
+    attr: { src: '../img/video.svg', alt: 'phone' }
+  }, '.video')
+
+  createNewElement({ node: 'button', attr: { class: 'circle-btn message' } }, '.user__buttons')
+
+  createNewElement({
+    node: 'img',
+    attr: { src: '../img/message.svg', alt: 'phone' }
+  }, '.message')
+
+}
+
+
+const addUsers = (data) => {
   users = data
   users.forEach((user) => {
-    createUser(user)
+    createUserCard(user)
   })
 }
 
 fetch('../data/users.json')
   .then(response => response.json())
-  .then(data => appendUsers(data))
+  .then(data => addUsers(data))
 
 
-// search.addEventListener('input', (e) => {
-//   const value = e.target.value.trim()
+search.addEventListener('input', (e) => {
+  const value = e.target.value.trim().toLowerCase()
 
-//   if (value) {
-//     items.forEach((elem) => {
-//       if (elem.innerText.search(value) === -1) {
-//         elem.classList.add('hide')
-//         elem.innerHTML = elem.innerText
-//       } else {
-//         elem.classList.remove('hide')
-//         let str = elem.innerText
-//         elem.innerHTML = highlightMark(str, elem.innerText.search(value), value.length)
-//       }
-//     })
-//   } else {
-//     items.forEach((elem) => {
-//       elem.classList.remove('hide')
-//       elem.innerHTML = elem.innerText
-//     })
-//   }
-// })
+  const userTitles = document.querySelectorAll('.user__title')
 
-// const highlightMark = (str, position, lenght) => {
-//   return str.slice(0, position) + '<mark>' + str.slice(position, position + lenght) + '</mark>' + str.slice(position + lenght);
-// }
+  if (value) {
+    userTitles.forEach((el) => {
+
+      let userCard = el.closest('.user-card')
+
+      if (el.innerText.toLowerCase().search(value) === -1) {
+        userCard.classList.add('hide')
+        el.innerHTML = el.innerText
+      } else {
+        userCard.classList.remove('hide')
+        // let str = el.innerText
+        // el.innerHTML = highlightMark(str, el.innerText.indexOf(value), value.length)
+      }
+    })
+  } else {
+    userTitles.forEach((el) => {
+      let userCard = el.closest('.user-card')
+
+      userCard.classList.remove('hide')
+      el.innerHTML = el.innerText
+    })
+  }
+})
+
+const highlightMark = (str, position, lenght) => {
+  return `${str.slice(0, position)}<mark>${str.slice(position, position + lenght)}</mark>${str.slice(position + lenght)}`;
+}
