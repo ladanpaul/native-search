@@ -17,6 +17,10 @@
   box-sizing: border-box;
 }
 
+li {
+  list-style: none;
+}
+
 body {
   background: lightgrey;
 }
@@ -28,8 +32,10 @@ body {
 }
 
 .header {
+  padding: 16px 0;
+
   .search {
-    padding: 16px;
+    padding: 0 16px 16px;
     border-bottom: 1px solid #E0E0E0;
     
     &__reset {
@@ -63,6 +69,11 @@ body {
         color: #828282;
       }
     }
+
+    &__input--autocomplete {
+      background: transparent;
+      padding-left: 26px;
+    }
     
     .input-wrapper {
       position: relative;
@@ -76,10 +87,18 @@ body {
         transform: translateY(-45%);
       }
     }
+
+    .input-wrapper--autocomplete {
+      position: relative;
+
+      &:after {
+        left: 0;
+      }
+    }
   }
   
   .filter {
-    padding: 16px;
+    padding-top: 15px;
     border-bottom: 1px solid #E0E0E0;
     font-family: RobotoLt;
 
@@ -87,7 +106,70 @@ body {
       font-size: rem(16);
       font-weight: 500;
       line-height: 21px;
+      padding: 0 16px;
       letter-spacing: .02em;
+    }
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 15px;
+    margin-left: -15px;
+    padding: 0 16px;
+
+    .tag {
+      position: relative;
+      padding: 0 28px 0 15px;
+      margin: 0 0 5px 10px;
+      height: 30px;
+      line-height: 30px;
+      font-size: rem(12);
+      color: #333;
+      border: 1px solid #E0E0E0;
+      border-radius: 35px;
+
+      .close {
+        display: flex;
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        border: none;
+        outline: none;
+        background: transparent;
+        opacity: .8;
+        cursor: pointer;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  .autocomplete-list {
+    position: absolute;
+    top: 40px;
+    width: 200px;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 3px 8px rgba(#000, .2);
+
+    &__item {
+      border-bottom: 1px solid #E0E0E0;
+      padding: 4px 15px;
+      font-size: 14px;
+      color: #828282;
+      cursor: pointer;
+
+      &:last-child {
+        border: none;
+      }
+
+      &:hover {
+        background: #fafafa;
+      }
     }
   }
 }

@@ -1,5 +1,8 @@
-const search = document.querySelector('.search__input')
-// const items = document.querySelectorAll('.users li')
+const search = document.querySelector('#search')
+const reset = document.querySelector('.search__reset')
+
+const searchAutocomplete = document.querySelector('#search-autocomplete')
+
 let users = null
 
 const addToPage = (node, parent) => {
@@ -15,6 +18,10 @@ const createNewElement = (el, parent) => {
     node.innerText = el.text
   }
 
+  if (el.html) {
+    node.innerHTML = el.html
+  }
+
   if (el.attr) {
     Object.keys(el.attr).forEach((key) => {
       node.setAttribute(key, el.attr[key])
@@ -27,10 +34,7 @@ const createNewElement = (el, parent) => {
 }
 
 const createUserCard = (user) => {
-  console.log(user);
   createNewElement({ node: 'div', attr: { class: 'card-wrapper' } }, '.wrapper')
-
-  createNewElement({ node: 'div', attr: { class: 'user-card' } }, '.card-wrapper')
 
   createNewElement({
     node: 'img',
@@ -115,6 +119,7 @@ const createUserCard = (user) => {
     attr: { src: '../img/message.svg', alt: 'phone' }
   }, '.message')
 
+  createNewElement({ node: 'div', attr: { class: 'user-card' } }, '.card-wrapper')
 }
 
 
@@ -129,27 +134,26 @@ fetch('../data/users.json')
   .then(response => response.json())
   .then(data => addUsers(data))
 
+const getUniqueValues = (arr) => arr.filter((el, index, currentArr) => index === currentArr.indexOf(el))
 
-search.addEventListener('input', (e) => {
-  const value = e.target.value.trim()
+const searchDoctor = (event) => {
+  const value = event.target.value.trim().toLowerCase()
 
-  // rowData.toLowerCase().indexOf(searchText.toLowerCase()) == -1
   const userTitles = document.querySelectorAll('.user__title')
 
-  // console.log('userTitles -> ', userTitles.parentElement)
   if (value) {
     userTitles.forEach((el) => {
-      // const diffCasess = el.innerText.toLowerCase().indexOf(value.toLowerCase() === -1)
-
       let userCard = el.closest('.user-card')
 
-      if (el.innerText.search(value) === -1) {
+      if (el.innerText.toLowerCase().search(value) === -1) {
         userCard.classList.add('hide')
         el.innerHTML = el.innerText
       } else {
         userCard.classList.remove('hide')
         let str = el.innerText
-        el.innerHTML = highlightMark(str, el.innerText.search(value), value.length)
+        // console.log('str -> ', str.splice('sp'))
+        el.innerHTML = highlightMark(str, el.innerText.indexOf(value), value.length)
+        // debugger
       }
     })
   } else {
@@ -160,8 +164,59 @@ search.addEventListener('input', (e) => {
       el.innerHTML = el.innerText
     })
   }
-})
-
-const highlightMark = (str, position, lenght) => {
-  return str.slice(0, position) + '<mark>' + str.slice(position, position + lenght) + '</mark>' + str.slice(position + lenght);
 }
+
+const getSpecialities = () => {
+  return users.reduce((acc, user) => {
+    if (user.speciality && user.speciality.length) {
+      return acc.concat(...user.speciality);
+    }
+
+    return acc
+  }, [])
+}
+
+const autocompleteValues = (html) => {
+  createNewElement({
+    node: 'li',
+    html,
+    attr: { class: 'autocomplete-list__item' }
+  }, '.autocomplete-list')
+}
+
+const addTagSpeciality = (event) => {
+  const value = event.target.value.trim().toLowerCase()
+
+  const specialities = getUniqueValues(getSpecialities())
+
+  const listItems = document.getElementsByClassName('autocomplete-list')[0]
+  // const listItem = document.querySelectorAll('.autocomplete-list__item')
+
+  if (value) {
+    listItems.innerHTML = null
+
+    specialities.forEach((el) => {
+      if (el.toLowerCase().search(value) !== -1) {
+        el = highlightMark(el, el.indexOf(value), value.length)
+        autocompleteValues(el)
+        listItems.classList.remove('hide')
+      }
+    })
+  } else {
+    listItems.classList.add('hide')
+  }
+}
+
+const highlightMark = (str, position, length) => {
+  if (position === -1) {
+    position = 0
+  }
+
+  // console.log(str, position, length)
+
+  return `${str.slice(0, position)}<mark>${str.slice(position, position + length)}</mark>${str.slice(position + length)}`;
+}
+
+search.addEventListener('input', searchDoctor)
+
+searchAutocomplete.addEventListener('input', addTagSpeciality)
