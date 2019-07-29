@@ -16,13 +16,28 @@
       <section class="search">
         <button class="search__reset">Сбросить</button>
         <div class="input-wrapper">
-          <input type="text" class="search__input" placeholder="Поиск">
+          <input type="text" class="search__input" id="search" placeholder="Поиск">
         </div>
       </section>
       <section class="filter">
         <h4 class="filter-wrapper__title">
           Специальности врачей
         </h4>
+        <ul class="tags">
+          <!-- <li class="tag">
+            <span>my first tag</span>
+            <button class="close">
+              <img src="./img/close.png" alt="delete">
+            </button>
+          </li> -->
+        </ul>
+        <div class="search">
+          <div class="input-wrapper input-wrapper--autocomplete">
+            <input type="text" id="search-autocomplete" class="search__input search__input--autocomplete"
+              placeholder="Введите специальность...">
+            <ul class="autocomplete-list hide" />
+          </div>
+        </div>
       </section>
     </header>
   </div>
