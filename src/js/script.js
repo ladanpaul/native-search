@@ -1,15 +1,19 @@
 const search = document.querySelector('#search')
 const reset = document.querySelector('.search__reset')
 const searchAutocomplete = document.querySelector('#search-autocomplete')
+const autocompleteList = document.querySelector('.autocomplete-list')
 
-let users = null
+let doctors = null
+let tags = []
 
+// add tag to page if we have element on page
 const addToPage = (node, parent) => {
   document.querySelectorAll(parent).forEach((el) => {
     el.appendChild(node)
   })
 }
 
+// create a new element and return it
 const createNewElement = (el, parent) => {
   el.node = el.node || 'div'
 
@@ -29,272 +33,236 @@ const createNewElement = (el, parent) => {
     });
   }
 
-  return node
-
-  // if (parent) {
-  //   addToPage(node, parent)
-  // }
+  return parent ? addToPage(node, parent) : node
 }
 
 const getCardWrapper = () => createNewElement({ attr: { class: 'card-wrapper' } })
 
-const getUserCard = () => createNewElement({ attr: { class: 'user-card' } })
+const getdoctorCard = () => createNewElement({ attr: { class: 'doctor-card' } })
 
-const getUserAvatar = (user) => createNewElement({ 
+const getdoctorAvatar = (doctor) => createNewElement({
   node: 'img',
-  attr: { class: 'avatar', src: user.avatar, alt: 'doctor' }
+  attr: { class: 'avatar', src: doctor.avatar, alt: 'doctor' }
 })
 
-const getUserSection = () => createNewElement({ attr: { class: 'user' } })
+const getdoctorSection = () => createNewElement({ attr: { class: 'doctor' } })
 
-const getUserName = (user) => createNewElement({
+const getdoctorName = (doctor) => createNewElement({
   node: 'h3',
-  text: `${user.first_name} ${user.last_name}`,
-  attr: { class: 'user__title' }
+  text: `${doctor.first_name} ${doctor.last_name}`,
+  attr: { class: 'doctor__title' }
 })
 
-const getUserStatus = (user) => createNewElement({
+const getdoctorStatus = (doctor) => createNewElement({
   node: 'span',
-  text: user.status ? 'В сети' : 'Не в сети',
-  attr: { class: 'user__status' }
+  text: doctor.status ? 'В сети' : 'Не в сети',
+  attr: { class: 'doctor__status' }
 })
 
-const getUserRate = () => createNewElement({ attr: { class: 'user__rate rate' } })
+const getdoctorRate = () => createNewElement({ attr: { class: 'doctor__rate rate' } })
 
-const getUserStars = (user) => {
-  for (let i = 0; i < user.rate; i++) {
-    return createNewElement({
+const getdoctorStars = (doctor) => {
+  const stars = []
+
+  for (let i = 0; i < doctor.rate; i++) {
+    stars.push(createNewElement({
       node: 'img',
       attr: { class: 'rate__star', src: '../img/Star.svg', alt: 'star' }
-    })
+    }))
   }
+
+  return stars
 }
 
-const getUserRateCount = (user) => createNewElement({
+const getdoctorRateCount = (doctor) => createNewElement({
   node: 'span',
-  text: `(${user.rate})`,
+  text: `(${doctor.rate})`,
   attr: { class: 'rate__count' }
 })
 
-const getUserComments = (user) => createNewElement({
+const getdoctorComments = (doctor) => createNewElement({
   node: 'span',
-  text: `Отзыввы ${user.comments}`,
+  text: `Отзыввы ${doctor.comments}`,
   attr: { class: 'comments' }
 })
 
-const getUserSpeciality = (user) => createNewElement({
-  text: user.speciality ? user.speciality.join(', ') : '',
-  attr: { class: 'user__position' }
+const getdoctorSpeciality = (doctor) => createNewElement({
+  text: doctor.speciality ? doctor.speciality.join(', ') : '',
+  attr: { class: 'doctor__position' }
 })
 
-const getUserCost = () => createNewElement({ attr: { class: 'user__cost cost' } })
+const getdoctorCost = () => createNewElement({ attr: { class: 'doctor__cost cost' } })
 
-const getUserCurrency = (user) => createNewElement({
+const getdoctorCurrency = (doctor) => createNewElement({
   node: 'span',
   text: '250 грн',
   attr: { class: 'cost__currency' }
 })
 
-const getUserTime = (user) => createNewElement({
+const getdoctorTime = (doctor) => createNewElement({
   node: 'span',
   text: '(10 минут)',
   attr: { class: 'cost__time' }
 })
 
-const getUserButtons = () => createNewElement({ attr: { class: 'user__buttons' } })
+const getdoctorButtons = () => createNewElement({ attr: { class: 'doctor__buttons' } })
 
-const getUserPhoneBtn = () => createNewElement({
+const getdoctorPhoneBtn = () => createNewElement({
   node: 'button',
   attr: { class: 'circle-btn phone' }
 })
 
-const getUserPhoneImg = () => createNewElement({
+const getdoctorPhoneImg = () => createNewElement({
   node: 'img',
   attr: { src: '../img/phone.svg', alt: 'phone' }
 })
 
-const getUserVideoBtn = () => createNewElement({
+const getdoctorVideoBtn = () => createNewElement({
   node: 'button',
   attr: { class: 'circle-btn video' }
 })
 
-const getUserVideoImg = () => createNewElement({
+const getdoctorVideoImg = () => createNewElement({
   node: 'img',
   attr: { src: '../img/video.svg', alt: 'phone' }
 })
 
-const getUserMessageBtn = () => createNewElement({
+const getdoctorMessageBtn = () => createNewElement({
   node: 'button',
   attr: { class: 'circle-btn message' }
 })
 
-const getUserMessageImg = () => createNewElement({
+const getdoctorMessageImg = () => createNewElement({
   node: 'img',
   attr: { src: '../img/message.svg', alt: 'phone' }
 })
 
-const createUserCard = (user) => {
-
-  // createNewElement({ node: 'div', attr: { class: 'card-wrapper' } }, '.wrapper')
-  // createNewElement({ node: 'div', attr: { class: 'user-card' } }, '.card-wrapper')
-  // createNewElement({
-  //   node: 'img',
-  //   attr: { class: 'avatar', src: user.avatar, alt: 'doctor' }
-  // }, '.user-card')
-  // createNewElement({ node: 'div', attr: { class: 'user' } }, '.user-card')
-  
-  // const title = createNewElement({
-  //   node: 'h3',
-  //   text: `${user.first_name} ${user.last_name}`,
-  //   attr: { class: 'user__title' }
-  // }, '.user')
-
-  // createNewElement({
-  //   node: 'span',
-  //   text: user.status ? 'В сети' : 'Не в сети',
-  //   attr: { class: 'user__status' }
-  // }, '.user')
-
-  // createNewElement({ node: 'div', attr: { class: 'user__rate rate' } }, '.user')
-
-  // for (let i = 0; i < user.rate; i++) {
-  //   createNewElement({
-  //     node: 'img',
-  //     attr: { class: 'rate__star', src: '../img/Star.svg', alt: 'star' }
-  //   }, '.rate')
-  // }
-
-  // createNewElement({
-  //   node: 'span',
-  //   text: `(${user.rate})`,
-  //   attr: { class: 'rate__count' }
-  // }, '.rate')
-
-  // createNewElement({
-  //   node: 'span',
-  //   text: `Отзыввы ${user.comments}`,
-  //   attr: { class: 'comments' }
-  // }, '.rate')
-  
-  // createNewElement({
-  //   node: 'div',
-  //   text: user.speciality ? user.speciality.join(', ') : '',
-  //   attr: { class: 'user__position' }
-  // }, '.user')
-
-  // createNewElement({ node: 'div', attr: { class: 'user__cost cost' } }, '.user')
-
-  // createNewElement({
-  //   node: 'span',
-  //   text: '250 грн',
-  //   attr: { class: 'cost__currency' }
-  // }, '.cost')
-
-  // createNewElement({
-  //   node: 'span',
-  //   text: '(10 минут)',
-  //   attr: { class: 'cost__time' }
-  // }, '.cost')
-
-  // createNewElement({ node: 'div', attr: { class: 'user__buttons' } }, '.user')
-  
-  // createNewElement({ node: 'button', attr: { class: 'circle-btn phone' } }, '.user__buttons')
-
-  // createNewElement({
-  //   node: 'img',
-  //   attr: { src: '../img/phone.svg', alt: 'phone' }
-  // }, '.phone')
-  
-  // createNewElement({ node: 'button', attr: { class: 'circle-btn video' } }, '.user__buttons')
-
-  // createNewElement({
-  //   node: 'img',
-  //   attr: { src: '../img/video.svg', alt: 'phone' }
-  // }, '.video')
-  
-  // createNewElement({ node: 'button', attr: { class: 'circle-btn message' } }, '.user__buttons')
-  
-  // createNewElement({
-  //   node: 'img',
-  //   attr: { src: '../img/message.svg', alt: 'phone' }
-  // }, '.message')
-
+// create and append element to card
+// this way is better, cuz we don't have problem with repaint and reflow
+const createdoctorCard = (doctor) => {
+  const doctorCard = getdoctorCard()
   const cardWrapper = getCardWrapper()
-  const userCard = getUserCard()
-  const userAvatar = getUserAvatar(user)
-  const userSection = getUserSection()
-  const userName = getUserName(user)
-  const userStatus = getUserStatus(user)
-  const userRate = getUserRate()
-  const userStars = getUserStars(user)
-  const userRateCount = getUserRateCount(user)
-  const userComments = getUserComments(user)
-  const userSpeciality = getUserSpeciality(user)
-  const userCost = getUserCost()
-  const userCostCurrency = getUserCurrency(user)
-  const userCostTime = getUserTime(user)
-  const userButtons = getUserButtons()
-  const userPhoneBtn = getUserPhoneBtn()
-  const userPhoneImg = getUserPhoneImg()
-  const userVideoBtn = getUserVideoBtn()
-  const userVideoImg = getUserVideoImg()
-  const userMessageBtn = getUserMessageBtn()
-  const userMessageImg = getUserMessageImg()
+  const doctorAvatar = getdoctorAvatar(doctor)
+  const doctorSection = getdoctorSection()
+  const doctorName = getdoctorName(doctor)
+  const doctorStatus = getdoctorStatus(doctor)
+  const doctorRate = getdoctorRate()
+  const doctorStars = getdoctorStars(doctor)
+  const doctorRateCount = getdoctorRateCount(doctor)
+  const doctorComments = getdoctorComments(doctor)
+  const doctorSpeciality = getdoctorSpeciality(doctor)
+  const doctorCost = getdoctorCost()
+  const doctorCostCurrency = getdoctorCurrency(doctor)
+  const doctorCostTime = getdoctorTime(doctor)
+  const doctorButtons = getdoctorButtons()
+  const doctorPhoneImg = getdoctorPhoneImg()
+  const doctorPhoneBtn = getdoctorPhoneBtn()
+  const doctorVideoImg = getdoctorVideoImg()
+  const doctorVideoBtn = getdoctorVideoBtn()
+  const doctorMessageImg = getdoctorMessageImg()
+  const doctorMessageBtn = getdoctorMessageBtn()
 
-  // createNewElement({ node: 'div', attr: { class: 'user-card' } }, '.card-wrapper')
+  cardWrapper.appendChild(doctorCard)
+  doctorCard.append(doctorAvatar, doctorSection)
+  doctorRate.append(...doctorStars, doctorRateCount, doctorComments)
+  doctorSection.append(doctorName, doctorStatus, doctorRate, doctorSpeciality, doctorCost, doctorButtons)
+  doctorCost.append(doctorCostCurrency, doctorCostTime)
+  doctorPhoneBtn.appendChild(doctorPhoneImg)
+  doctorVideoBtn.appendChild(doctorVideoImg)
+  doctorMessageBtn.appendChild(doctorMessageImg)
+  doctorButtons.append(doctorPhoneBtn, doctorVideoBtn, doctorMessageBtn)
+
+  return cardWrapper
 }
 
-
-const addUsers = (data) => {
-  const userCards = data.map((user) => createUserCard(user))
-  // console.log(...userCards)
-  // wrapper.append(...userCards)
+// append all doctors to page
+const addDoctors = (data) => {
+  doctors = data
+  const doctorCards = doctors.map((doctor) => createdoctorCard(doctor))
+  const doctorsSection = document.querySelector('.doctors')
+  doctorsSection.append(...doctorCards)
 }
 
-fetch('../data/users.json')
+//get data from server
+fetch('../data/doctors.json')
   .then(response => response.json())
-  .then(data => addUsers(data))
+  .then(data => addDoctors(data))
 
-const getUniqueValues = (arr) => arr.filter((el, index, currentArr) => index === currentArr.indexOf(el))
+// function to get uniquie values from array
+const getUniqueValues = arr => arr.filter((el, index, currentArr) => index === currentArr.indexOf(el))
 
-const searchDoctor = (event) => {
-  const value = event.target.value.trim().toLowerCase()
+let searchedValue = []
+// search item into the collection of an elements
+const searchItemBy = (elements, val) => {
+  // can be object or string
+  if (typeof val === 'object') {
+    val.forEach((item) => {
+      searchedValue.push(item.toLowerCase())
+    })
+  } else {
+    searchedValue = val.trim().toLowerCase()
+  }
 
-  const userTitles = document.querySelectorAll('.user__title')
+  if (searchedValue) {
+    elements.forEach((el) => {
+      let doctorCard = el.closest('.doctor-card')
 
-  if (value) {
-    userTitles.forEach((el) => {
-      let userCard = el.closest('.user-card')
-
-      if (el.innerText.toLowerCase().search(value) !== -1) {
-        userCard.classList.remove('hide')
+      if (el.innerText.toLowerCase().search(searchedValue) !== -1) {
+        doctorCard.classList.remove('hide')
         let str = el.innerText
-
-        el.innerHTML = highlightMark(str, str.toLowerCase().indexOf(value), value.length)
+        // add tag mark into html for hightlight
+        el.innerHTML = highlightMark(str, str.toLowerCase().indexOf(searchedValue), searchedValue.length)
       } else {
-        userCard.classList.add('hide')
+        doctorCard.classList.add('hide')
       }
     })
   } else {
-    userTitles.forEach((el) => {
-      let userCard = el.closest('.user-card')
+    elements.forEach((el) => {
+      let doctorCard = el.closest('.doctor-card')
 
-      userCard.classList.remove('hide')
+      doctorCard.classList.remove('hide')
       el.innerHTML = el.innerText
     })
   }
 }
 
+// find doctor by docrot title
+const searchDoctor = (event) => {
+  const value = event.target.value
+
+  const doctorTitles = document.querySelectorAll('.doctor__title')
+  searchItemBy(doctorTitles, value)
+}
+
+// function for remove tag - TODO
+const removeTag = function() {
+  const tag = this.closest('.tag')
+  console.log('tag -> ', tag)
+}
+
+// find tag for delete
+const findToRemove = () => {
+  const tags = document.querySelectorAll('.delete-tag')
+  tags.forEach(tag => tag.addEventListener('click', removeTag))
+}
+
+const filterBySpeciality = (tagTitle) => {
+  const positions = document.querySelectorAll('.doctor__position')
+  searchItemBy(positions, tagTitle)
+  findToRemove()
+}
+
 const getSpecialities = () => {
-  return users.reduce((acc, user) => {
-    if (user.speciality && user.speciality.length) {
-      return acc.concat(...user.speciality);
+  return doctors.reduce((acc, doctor) => {
+    if (doctor.speciality && doctor.speciality.length) {
+      return acc.concat(...doctor.speciality);
     }
 
     return acc
   }, [])
 }
 
+// create html tag for autocomplete ( dropdown )
 const createAutocompleteValues = (html) => {
   createNewElement({
     node: 'li',
@@ -304,23 +272,20 @@ const createAutocompleteValues = (html) => {
 }
 
 
-const tags = []
-const uniqueTag = document.querySelectorAll('.tag')
+const checkUniqueTag = (tagTitle) => {
+  const addedTags = document.querySelectorAll('.tag')
+  addedTags.forEach((tag) => {
+    tags.push(tag.innerText)
+  })
 
-const checkUniqueTag = (tag) => {
-  // console.log('uniqueTag.length -> ', uniqueTag.length)
-  // if (uniqueTag.length) {
-  //   uniqueTag.forEach((item) => {
-  //     tags.push(item.innerText)
-  //   })
-  //   console.log('tags -> ', tags)
-
-  //   console.log('getUniqueValues(tags) -> ', getUniqueValues(tags))
-  // } else {
-  //   tags.push(tag)
-  //   console.log('tags -> ', tags)
-  //   addTag(tag)
-  // }
+  if (tags.includes(tagTitle)) {
+    return
+  } else {
+    addTag(tagTitle)
+    tags.length = 0
+    // when we have tag on page, add it to filter
+    filterBySpeciality(tagTitle)
+  }
 }
 
 const addTag = (tag) => {
@@ -345,8 +310,6 @@ const autocomplete = (event) => {
   const value = event.target.value.trim().toLowerCase()
 
   const specialities = getUniqueValues(getSpecialities())
-
-  const autocompleteList = document.getElementsByClassName('autocomplete-list')[0]
 
   if (value) {
     autocompleteList.innerHTML = null
@@ -380,6 +343,27 @@ const highlightMark = (str, position, length) => {
   return `${str.slice(0, position)}<mark>${str.slice(position, position + length)}</mark>${str.slice(position + length)}`;
 }
 
+const clearHightlight = (elements) => elements.forEach(element => element.innerHTML = element.innerText)
+
+const resetSearch = () => {
+  const hiddenDoctors = document.querySelectorAll('.hide')
+  const doctorTitles = document.querySelectorAll('.doctor__title')
+  const doctorPositions = document.querySelectorAll('.doctor__position')
+  const tags = document.querySelector('.tags')
+
+  clearHightlight(doctorTitles)
+  clearHightlight(doctorPositions)
+
+  hiddenDoctors.forEach(doctor => doctor.classList.remove('hide'))
+
+  autocompleteList.classList.add('hide')
+  search.value = ''
+  tags.innerHTML = ''
+  searchAutocomplete.value = ''
+}
+
 search.addEventListener('input', searchDoctor)
 
 searchAutocomplete.addEventListener('input', autocomplete)
+
+reset.addEventListener('click', resetSearch)
